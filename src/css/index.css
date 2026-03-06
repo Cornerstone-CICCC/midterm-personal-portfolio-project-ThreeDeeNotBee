@@ -1,78 +1,152 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+  --wheel-radius: 200vh; /* Distance to the center of the "wheel" */
+  --card-width: 100vw;
+  --card-height: 100vh;
+  --bg-color: #0f172a;
+  --rotation-angle: 12deg;
+  --rotation-angle-n: -12deg;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  background-color: #f4f4f4;
-  padding: 20px;
+  margin: 0;
+  background-color: var(--bg-color);
+  font-family: system-ui, -apple-system, sans-serif;
+  color: white;
+  overflow: hidden; /* Prevent vertical scroll on body */
 }
 
-.navbar {
+.scroll-container {
+
+}
+/* 1. The Main Scroll Container */
+.wheel {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background-color: #333;
-  color: #fff;
-  padding: 10px 20px;
-}
-.navbar .icon img {
-  height: 40px;
-  width: 40px;
-  filter: invert(100%);
-}
-.navbar .buttons button {
-  background: none;
-  border: none;
-  color: #fff;
-  margin-left: 20px;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 16px;
-}
-.navbar .buttons button:hover {
-  background-color: #575757;
-  border-radius: 5px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Hide scrollbar*/
 }
 
-main {
-  margin-top: 20px;
-  padding: 20px;
-  background: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-main h1 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  color: #333;
-}
-main p {
-  font-size: 16px;
-  color: #555;
+/* 2. The Track that holds the cards */
+.wheel-track {
+  display: flex;
+  padding: 0 calc(50vw - (var(--card-width) / 2));
+  gap: 1px;
+  transform-style: preserve-3d;
 }
 
-@media (max-width: 600px) {
-  .navbar {
-    flex-direction: column;
+/* 3. The Individual Cards */
+.cog {
+  flex: 0 0 var(--card-width);
+  height: var(--card-height);
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  scroll-snap-align: center;
+  scrollbar-width: unset;
+  /*Rotate around a point far below the card */
+  transform-origin: center var(--wheel-radius);
+
+  /* Linking animation to scroll progress */
+  view-timeline-name: --card-scroll;
+  view-timeline-axis: inline;
+  animation: wheel-and-spiral linear both;
+  animation-timeline: --card-scroll;
+ 
+  overflow-y: auto;
+  scroll-behavior: auto;
+}
+
+.cog h2 {
+  font-size: 5rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.cog h3{
+  font-size: 4rem;
+  margin: 0;
+  opacity: 0.8;
+  padding-left: 20%;
+  padding-top: 5%;
+}
+.cog h4{
+  font-size: 3rem;
+  margin: 0;
+  opacity: 0.8;
+  padding-left: 20%;
+}
+.cog p{
+  padding: 1%;
+  font-size: 2rem;
+}
+
+@keyframes wheel-and-spiral {
+0% {
+  /* Start: Tilted left, further*/
+  transform: rotateZ(var(--rotation-angle)) translateZ(-500px) translateY(15vw);
+  opacity: 0;
+  filter: blur(5px);
   }
-  .navbar .buttons {
-    display: flex;
-    flex-direction: column;
+50% {
+  /* Center: Upright, closest to viewer (0px), fully visible */
+  transform: rotateZ(0deg) translateZ(0px) translateY(0px);
+  opacity: 1;
+  filter: blur(0px);
   }
-  .navbar .buttons button {
-    margin: 10px 0;
+100% {
+  /* End: Tilted right, moving back into distance */
+  transform: rotateZ(var(--rotation-angle-n)) translateZ(-500px) translateY(15vw);
+  opacity: 0;
+  filter: blur(5px);
   }
-  main {
-    padding: 10px;
-  }
-  main h1 {
-    font-size: 20px;
-  }
-  main p {
-    font-size: 14px;
-  }
+}
+
+.arrowLeft{
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  width: 4rem;
+  height: 2rem;
+  top:  50%;
+  left: 1rem;
+  background-color: #0f172a;
+  color: bisque;
+  border-radius: 10px;
+  content: "←";
+}
+
+.arrowRight{
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  width: 4rem;
+  height: 2rem;
+  top:  50%;
+  right: 1rem;
+  background-color: #0f172a;
+  color: bisque;
+  border-radius: 10px;
+  content: "→";
+}
+
+.cogHead{
+  align-self: center;
+}
+.cogBody{
+  padding: 1rem;
+}
+
+img{
+  width: 3rem;
+  height: auto;
 }
