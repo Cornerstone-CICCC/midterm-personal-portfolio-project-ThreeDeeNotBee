@@ -1,7 +1,7 @@
 :root {
   --wheel-radius: 200vh; /* Distance to the center of the "wheel" */
-  --card-width: 100vw;
-  --card-height: 100vh;
+  --card-width: 95vw;
+  --card-height: 95vh;
   --bg-color: #0f172a;
   --rotation-angle: 12deg;
   --rotation-angle-n: -12deg;
@@ -26,7 +26,7 @@ body {
   overflow-y: hidden;
   display: flex;
   align-items: center;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
   scrollbar-width: none; /* Hide scrollbar*/
 }
 
@@ -59,8 +59,11 @@ body {
   animation-timeline: --card-scroll;
  
   overflow-y: auto;
-  scroll-behavior: auto;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
 }
+
+
 
 .cog h2 {
   font-size: 5rem;
